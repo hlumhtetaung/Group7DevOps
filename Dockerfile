@@ -1,12 +1,12 @@
-# Build the JAR with Maven and Temurin 26
-FROM maven:3.9-eclipse-temurin-26 AS build
+# Build the JAR with Maven
+FROM maven:3.9-eclipse-temurin-17 AS build
 WORKDIR /tmp
 COPY pom.xml .
 COPY src ./src
 RUN mvn clean package -DskipTests
 
-# Create runtime container with Temurin 26 JRE
-FROM eclipse-temurin:26-jre
+# Create runtime container
+FROM eclipse-temurin:17-jre
 WORKDIR /app
-COPY --from=build /tmp/target/seMethods-1.0-SNAPSHOT-jar-with-dependencies.jar app.jar
+COPY --from=build /tmp/target/group7-1.0-SNAPSHOT-jar-with-dependencies.jar app.jar
 ENTRYPOINT ["java", "-jar", "app.jar"]
