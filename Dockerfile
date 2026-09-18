@@ -1,4 +1,4 @@
 FROM eclipse-temurin:26-jdk
-COPY ./target/group7-1.0-SNAPSHOT-jar-with-dependencies.jar /tmp/
+COPY ./target/classes/com /tmp/com
 WORKDIR /tmp
-ENTRYPOINT ["java", "-jar", "group7-1.0-SNAPSHOT-jar-with-dependencies.jar"]
+ENTRYPOINT ["java", "com.napier.group7.Main"]
