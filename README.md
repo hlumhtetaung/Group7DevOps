@@ -10,4 +10,4 @@ Hlum Htet Aung (40841063): ![GitHub commit activity (branch)](https://img.shield
 
 
 Badges:
-CI Workflow badge: ![workflow](https://github.com/KhantPhoneNyo25/Group7DevOps/actions/workflows/main.yml/badge.svg)
+CI Workflow badge: ![workflow](https://github.com/hlumhtetaung/Group7DevOps/actions/workflows/main.yml/badge.svg)
