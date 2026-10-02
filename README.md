@@ -7,6 +7,7 @@ Coursework started at: (17/9/2026)
 
 Commit history:
 Hlum Htet Aung (40841063): ![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/t/hlumhtetaung/Group7DevOps/master)
+Christopher Patchitt (40870965): ![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/t/hlumhtetaung/Group7DevOps/features/chrispatch)
 
 
 Badges:
