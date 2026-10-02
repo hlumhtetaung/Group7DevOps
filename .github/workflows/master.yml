@@ -1,1 +1,57 @@
+# CI pipeline executing compilation, artifact verification,
+# and container testing via Maven and Docker.
 
+name: Java CI & Container Verification
+
+# Trigger execution on every push event to the repo.
+on:
+  push:
+
+jobs:
+  build:
+    name: Application Pipeline Execution
+
+    # Host job execution on an Ubuntu virtual environment.
+    runs-on: ubuntu-22.04
+
+    steps:
+
+      # Fetch latest repository code.
+      - name: Fetch source files
+        uses: actions/checkout@v4
+
+      # Configure Java 26 environment alongside Maven package caching.
+      - name: Initialize OpenJDK 26
+        uses: actions/setup-java@v4
+        with:
+          java-version: '26'
+          distribution: 'temurin'
+          cache: maven
+
+      # Execute full compilation cycle to generate deployable executable archive.
+      - name: Compile and package application
+        run: mvn clean package
+
+      # Confirm artifact creation in target directory.
+      - name: Inspect built artifact
+        run: ls -lh target/*.jar
+
+      # Construct local container image using root Dockerfile.
+      - name: Assemble Docker image
+        run: docker build -t devopsimage .
+
+      # Launch application container instance detached in background.
+      - name: Spin up application container
+        run: docker run --name devopscontainer -d devopsimage
+
+      # Pause execution briefly to allow service startup.
+      - name: Delay for container bootstrap
+        run: sleep 5
+
+      # Retrieve standard console output to confirm app startup state.
+      - name: Fetch runtime container output
+        run: docker logs devopscontainer
+
+      # Gracefully shut down active container post-test.
+      - name: Teardown running container
+        run: docker stop devopscontainer
