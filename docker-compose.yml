@@ -1,0 +1,10 @@
+services:
+    db:
+      image: mysql:8.4
+      container_name: group7-db
+      environment:
+        MYSQL_ROOT_PASSWORD: password
+      ports:
+        - "3307:3306"
+      volumes:
+        - ./db/world.sql:/docker-entrypoint-initdb.d/world.sql
