@@ -1,0 +1,117 @@
+@startuml
+
+left to right direction
+
+actor "Product Owner" as PO
+
+rectangle "Population Reporting System" {
+
+    'Country Reports'
+
+    usecase "Generate Country Reports" as CountryReports
+    usecase "View all countries (by population)" as AllCountries
+    usecase "View countries by continent/region" as CountriesByArea
+    usecase "View top N countries (world/continent/region)" as TopCountries
+
+
+    'City Reports'
+
+    usecase "Generate City Reports" as CityReports
+    usecase "View all cities (world/continent/region/country/district)" as AllCities
+    usecase "View top N cities (world/continent/region/country/district)" as TopCities
+
+
+    'Capital City Reports'
+
+    usecase "Generate Capital City Reports" as CapitalReports
+    usecase "View all capital cities (world/continent/region)" as AllCapitals
+    usecase "View top N capital cities (world/continent/region)" as TopCapitals
+
+
+    'Population Reports'
+
+    usecase "Generate Population Reports" as PopulationReports
+    usecase "Population report by continent" as PopulationContinent
+    usecase "Population report by region" as PopulationRegion
+    usecase "Population report by country" as PopulationCountry
+    usecase "Population report details (Name, total population, population living in cities, % living in cities, population not living in cities, % not living in cities)" as PopulationDetails
+
+
+    'Population Reports'
+
+    usecase "View Population Information" as PopulationInfo
+    usecase "View world population" as WorldPopulation
+    usecase "View continent population" as ContinentPopulation
+    usecase "View region population" as RegionPopulation
+    usecase "View country population" as CountryPopulation
+    usecase "View district population" as DistrictPopulation
+    usecase "View city population" as CityPopulation
+
+
+    'Language Reports'
+
+    usecase "Generate Language Reports" as LanguageReports
+    usecase "View language population (Chinese, English, Hindi, Spanish, Arabic)" as LanguagePopulation
+    usecase "Order languages by number of speakers (greatest to smallest)" as LanguageOrdering
+    usecase "Include percentage of world population" as LanguagePercentage
+
+
+    'Country Report Relations'
+
+    CountryReports ..> AllCountries : <<include>>
+    CountryReports ..> CountriesByArea : <<include>>
+    CountryReports ..> TopCountries : <<include>>
+
+
+    'City Report Relations'
+
+    CityReports ..> AllCities : <<include>>
+    CityReports ..> TopCities : <<include>>
+
+
+    'Capital Report Relations'
+
+    CapitalReports ..> AllCapitals : <<include>>
+    CapitalReports ..> TopCapitals : <<include>>
+
+
+    'Population Report Relations'
+
+    PopulationReports ..> PopulationContinent : <<include>>
+    PopulationReports ..> PopulationRegion : <<include>>
+    PopulationReports ..> PopulationCountry : <<include>>
+
+    PopulationContinent ..> PopulationDetails : <<include>>
+    PopulationRegion ..> PopulationDetails : <<include>>
+    PopulationCountry ..> PopulationDetails : <<include>>
+
+
+    'Population Report Relations'
+
+    PopulationInfo ..> WorldPopulation : <<include>>
+    PopulationInfo ..> ContinentPopulation : <<include>>
+    PopulationInfo ..> RegionPopulation : <<include>>
+    PopulationInfo ..> CountryPopulation : <<include>>
+    PopulationInfo ..> DistrictPopulation : <<include>>
+    PopulationInfo ..> CityPopulation : <<include>>
+
+
+    'Language Report Relations'
+
+    LanguageReports ..> LanguagePopulation : <<include>>
+    LanguagePopulation ..> LanguageOrdering : <<include>>
+    LanguagePopulation ..> LanguagePercentage : <<include>>
+
+
+    'Product Owner Arrows'
+
+    PO --> CountryReports
+    PO --> CityReports
+    PO --> CapitalReports
+    PO --> PopulationReports
+    PO --> PopulationInfo
+    PO --> LanguageReports
+
+}
+
+@enduml

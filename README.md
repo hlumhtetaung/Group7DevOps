@@ -4,11 +4,14 @@ Author name set
 
 Coursework started at: (17/9/2026)
 
+Badges:
 
 Commit history:
 Hlum Htet Aung (40841063): ![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/t/hlumhtetaung/Group7DevOps/master)
 Christopher Patchitt (40870965): ![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/t/hlumhtetaung/Group7DevOps/features/chrispatch)
 
+![workflow](https://github.com/hlumhtetaung/Group7DevOps/actions/workflows/master.yml/badge.svg)
+[![LICENSE](https://img.shields.io/github/license/hlumhtetaung/Group7DevOps.svg?style=flat-square)](https://github.com/hlumhtetaung/Group7DevOps/blob/master/LICENSE)
+[![Releases](https://img.shields.io/github/release/hlumhtetaung/Group7DevOps/all.svg?style=flat-square)](https://github.com/hlumhtetaung/Group7DevOps/releases)
 
-Badges:
-CI Workflow badge: ![workflow](https://github.com/hlumhtetaung/Group7DevOps/actions/workflows/master.yml/badge.svg)
+First release will be made when the setups are complete.
