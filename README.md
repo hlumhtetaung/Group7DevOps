@@ -22,6 +22,8 @@ Christopher Patchitt (40870965): ![GitHub commit activity (branch)](https://img.
 
 40841055 (Inkyin Phyu): ![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/t/hlumhtetaung/Group7DevOps/features/ingyinphyu)
 
+40841052 (Nang Khaing Thinzar Linh): ![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/t/hlumhtetaung/Group7DevOps/features/nangkhaing)
+
 ![workflow](https://github.com/hlumhtetaung/Group7DevOps/actions/workflows/master.yml/badge.svg)
 [![LICENSE](https://img.shields.io/github/license/hlumhtetaung/Group7DevOps.svg?style=flat-square)](https://github.com/hlumhtetaung/Group7DevOps/blob/master/LICENSE)
 [![Releases](https://img.shields.io/github/release/hlumhtetaung/Group7DevOps/all.svg?style=flat-square)](https://github.com/hlumhtetaung/Group7DevOps/releases)
