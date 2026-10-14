@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class CountryReport {
+public class US_A1_AllCountries {
 
     // US-A1: Display all countries by population, largest first
     public static void generateAllCountriesReport(Connection con) {
