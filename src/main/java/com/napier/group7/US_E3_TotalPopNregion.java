@@ -3,7 +3,7 @@ package com.napier.group7;
 import java.sql.*;
 import java.util.Scanner;
 
-public class US_E3 {
+public class US_E3_TotalPopNregion {
 
     // Local test settings matching your reference code
     private static final String URL = "jdbc:mysql://localhost:3307/world?useSSL=false&allowPublicKeyRetrieval=true";
