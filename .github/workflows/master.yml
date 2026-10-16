@@ -57,7 +57,7 @@ jobs:
 
       # Retrieve standard console output to confirm app startup state.
       - name: Fetch runtime container application output
-        run: docker logs devopscontainer || docker compose logs app
+        run: docker compose logs app
 
       # Gracefully shut down active containers post-test.
       - name: Teardown running containers and services
