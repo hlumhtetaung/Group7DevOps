@@ -35,6 +35,7 @@ public class ReportTestRunner {
                 System.out.println("2. US-A2: Countries by Continent");
                 System.out.println("3. US-A3: Countries by Region");
                 System.out.println("4. US-A4: Top N Countries Worldwide");
+                System.out.println("5. US-A5: Top N Countries by Continent");
                 System.out.println("0. Exit");
                 System.out.println("==================================");
                 System.out.print("Enter your choice: ");
@@ -75,13 +76,38 @@ public class ReportTestRunner {
                                 "Enter N (e.g. 10): ");
 
                         try {
-                            int n = Integer.parseInt(scanner.nextLine().trim());
+                            int n = Integer.parseInt(
+                                    scanner.nextLine().trim());
 
                             US_A4_TopNCountriesWorldwide
                                     .generateTopNCountriesWorldwide(con, n);
 
-                        }  catch (NumberFormatException e) {
-                            System.out.println("Please enter a valid whole number.");
+                        } catch (NumberFormatException e) {
+                            System.out.println(
+                                    "Please enter a valid whole number.");
+                        }
+                        break;
+
+                    case "5":
+                        System.out.print(
+                                "Enter continent (e.g. Asia): ");
+
+                        String selectedContinent =
+                                scanner.nextLine().trim();
+
+                        System.out.print("Enter N (e.g. 5): ");
+
+                        try {
+                            int topN = Integer.parseInt(
+                                    scanner.nextLine().trim());
+
+                            US_A5_TopNCountriesByContinent
+                                    .generateTopNCountriesByContinentReport(
+                                            con, selectedContinent, topN);
+
+                        } catch (NumberFormatException e) {
+                            System.out.println(
+                                    "Please enter a valid whole number.");
                         }
                         break;
 
