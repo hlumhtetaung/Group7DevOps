@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class Main {
+public class WorldDatabaseConnectionApp {
 
     // Defaults suit running from IntelliJ against the docker-compose database.
     // Inside Docker, DB_HOST and DB_PORT are set to the db container instead.
