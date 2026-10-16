@@ -6,20 +6,28 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class main {
+public class Main {
 
-    // Local test settings. The port matches docker-compose.yml (3307).
+    // Defaults suit running from IntelliJ against the docker-compose database.
+    // Inside Docker, DB_HOST and DB_PORT are set to the db container instead.
+    private static final String HOST = getEnv("DB_HOST", "localhost");
+    private static final String PORT = getEnv("DB_PORT", "3307");
+    private static final String USER = getEnv("DB_USER", "root");
+    private static final String PASSWORD = getEnv("DB_PASSWORD", "password");
     private static final String URL =
-            "jdbc:mysql://localhost:3307/world?useSSL=false&allowPublicKeyRetrieval=true";
-    private static final String USER = "root";
-    private static final String PASSWORD = "password";
+            "jdbc:mysql://" + HOST + ":" + PORT + "/world?useSSL=false&allowPublicKeyRetrieval=true";
+
+    private static String getEnv(String name, String fallback) {
+        String value = System.getenv(name);
+        return (value == null || value.isEmpty()) ? fallback : value;
+    }
 
     public static void main(String[] args) {
         Connection con = null;
         int retries = 10;
 
         for (int i = 1; i <= retries; i++) {
-            System.out.println("Connecting to database, attempt " + i);
+            System.out.println("Connecting to " + HOST + ":" + PORT + ", attempt " + i);
             try {
                 con = DriverManager.getConnection(URL, USER, PASSWORD);
                 System.out.println("Connected");
@@ -55,4 +63,3 @@ public class main {
         }
     }
 }
-
