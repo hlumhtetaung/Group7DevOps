@@ -34,6 +34,7 @@ public class ReportTestRunner {
                 System.out.println("1. US-A1: All Countries");
                 System.out.println("2. US-A2: Countries by Continent");
                 System.out.println("3. US-A3: Countries by Region");
+                System.out.println("4. US-A4: Top N Countries Worldwide");
                 System.out.println("0. Exit");
                 System.out.println("==================================");
                 System.out.print("Enter your choice: ");
@@ -67,6 +68,21 @@ public class ReportTestRunner {
                         US_A3_CountriesByRegion
                                 .generateCountriesByRegionReport(
                                         con, region);
+                        break;
+
+                    case "4":
+                        System.out.print(
+                                "Enter N (e.g. 10): ");
+
+                        try {
+                            int n = Integer.parseInt(scanner.nextLine().trim());
+
+                            US_A4_TopNCountriesWorldwide
+                                    .generateTopNCountriesWorldwide(con, n);
+
+                        }  catch (NumberFormatException e) {
+                            System.out.println("Please enter a valid whole number.");
+                        }
                         break;
 
                     case "0":
