@@ -31,7 +31,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.napier.group7.main</mainClass>
+                            <mainClass>com.napier.group7.Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

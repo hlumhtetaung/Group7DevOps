@@ -1,57 +1,85 @@
-# CI pipeline executing compilation, artifact verification,
-# and container testing via Maven and Docker.
+# CI pipeline for Maven compilation, MySQL connection testing,
+# and Docker container verification.
 
 name: Java CI & Container Verification
 
-# Trigger execution on every push event to the repo.
 on:
   push:
+  pull_request:
 
 jobs:
   build:
     name: Application Pipeline Execution
-
-    # Host job execution on an Ubuntu virtual environment.
     runs-on: ubuntu-22.04
 
-    steps:
+    # Start MySQL for the integration test.
+    services:
+      db:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: world
+        ports:
+          - 3307:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -ppassword"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
 
-      # Fetch latest repository code.
+    env:
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3307
+      DB_USER: root
+      DB_PASSWORD: password
+
+    steps:
       - name: Fetch source files
         uses: actions/checkout@v4
 
-      # Configure Java 26 environment alongside Maven package caching.
-      - name: Initialize OpenJDK 26
+      - name: Initialize Java 26
         uses: actions/setup-java@v4
         with:
           java-version: '26'
-          distribution: 'temurin'
+          distribution: temurin
           cache: maven
 
-      # Execute full compilation cycle to generate deployable executable archive.
+      # Load the World database schema and data.
+      # Change this path to the actual SQL dump in your repository.
+      - name: Import World database
+        run: mysql -h 127.0.0.1 -P 3307 -u root -ppassword world < path/to/world.sql
+
       - name: Compile and package application
         run: mvn clean package
 
-      # Confirm artifact creation in target directory.
-      - name: Inspect built artifact
+      - name: Verify generated JAR
         run: ls -lh target/*.jar
 
-      # Construct local container image using root Dockerfile.
-      - name: Assemble Docker image
+      # Test the Java database connection on the runner.
+      - name: Test MySQL connection
+        run: java -jar target/seMethods-1.0-SNAPSHOT.jar
+
+      - name: Build Docker image
         run: docker build -t devopsimage .
 
-      # Launch application container instance detached in background.
-      - name: Spin up application container
-        run: docker run --name devopscontainer -d devopsimage
+      # The container must use the host gateway to reach MySQL.
+      - name: Test Docker container
+        run: |
+          docker run --name devopscontainer \
+            --add-host=host.docker.internal:host-gateway \
+            -e DB_HOST=host.docker.internal \
+            -e DB_PORT=3307 \
+            -e DB_USER=root \
+            -e DB_PASSWORD=password \
+            devopsimage || {
+              docker logs devopscontainer
+              exit 1
+            }
 
-      # Pause execution briefly to allow service startup.
-      - name: Delay for container bootstrap
-        run: sleep 5
+      - name: View container logs
+        if: always()
+        run: docker logs devopscontainer || true
 
-      # Retrieve standard console output to confirm app startup state.
-      - name: Fetch runtime container output
-        run: docker logs devopscontainer
-
-      # Gracefully shut down active container post-test.
-      - name: Teardown running container
-        run: docker stop devopscontainer
+      - name: Clean up container
+        if: always()
+        run: docker rm -f devopscontainer || true
