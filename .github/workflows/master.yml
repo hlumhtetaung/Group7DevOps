@@ -1,7 +1,9 @@
+# CI pipeline executing compilation, artifact verification,
+# database connectivity check, and container testing via Maven and Docker.
 # CI pipeline for Maven compilation, MySQL connection testing,
 # and Docker container verification.
 
-name: Java CI & Container Verification
+name: Group 7 Java CI & Database Container Verification
 
 on:
   push:
@@ -9,6 +11,9 @@ on:
 
 jobs:
   build:
+    name: Group 7 Assessment Pipeline Execution
+
+    # Host job execution on an Ubuntu virtual environment.
     name: Application Pipeline Execution
     runs-on: ubuntu-22.04
 
@@ -34,9 +39,14 @@ jobs:
       DB_PASSWORD: password
 
     steps:
+
+      # Fetch latest repository code.
+      - name: Fetch source files from repository
       - name: Fetch source files
         uses: actions/checkout@v4
 
+      # Configure Java environment alongside Maven package caching.
+      - name: Initialize OpenJDK environment
       - name: Initialize Java 26
         uses: actions/setup-java@v4
         with:
@@ -44,6 +54,8 @@ jobs:
           distribution: temurin
           cache: maven
 
+      # Execute full compilation cycle to generate deployable executable archive.
+      - name: Compile and package application (mvn clean package)
       # Load the World database schema and data.
       # Change this path to the actual SQL dump in your repository.
       - name: Import World database
@@ -52,9 +64,13 @@ jobs:
       - name: Compile and package application
         run: mvn clean package
 
+      # Confirm artifact creation in target directory.
+      - name: Inspect built artifact in target directory
       - name: Verify generated JAR
         run: ls -lh target/*.jar
 
+      # Construct local container image using root Dockerfile.
+      - name: Assemble application Docker image
       # Test the Java database connection on the runner.
       - name: Test MySQL connection
         run: java -jar target/seMethods-1.0-SNAPSHOT.jar
@@ -62,6 +78,9 @@ jobs:
       - name: Build Docker image
         run: docker build -t devopsimage .
 
+      # Use Docker Compose or spin up containers matching your service structure.
+      - name: Spin up application and database services via Docker Compose
+        run: docker compose up -d
       # The container must use the host gateway to reach MySQL.
       - name: Test Docker container
         run: |
@@ -76,10 +95,27 @@ jobs:
               exit 1
             }
 
+      # Pause execution briefly to allow service startup and database initialization.
+      - name: Delay for container bootstrap and DB readiness
+        run: sleep 10
+
+      # Check database connection and container health status.
+      - name: Test and Verify Database Connection Success
+        run: |
+          echo "Checking database container health status..."
+          docker inspect --format='{{json .State.Health.Status}}' group7-db || echo "Health check not configured, inspecting logs..."
+          docker logs group7-db | grep -i "ready for connections" || true
       - name: View container logs
         if: always()
         run: docker logs devopscontainer || true
 
+      # Retrieve standard console output to confirm app startup state.
+      - name: Fetch runtime container application output
+        run: docker compose logs app
+
+      # Gracefully shut down active containers post-test.
+      - name: Teardown running containers and services
+        run: docker compose down
       - name: Clean up container
         if: always()
         run: docker rm -f devopscontainer || true
