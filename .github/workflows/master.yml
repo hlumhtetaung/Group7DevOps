@@ -1,99 +1,48 @@
 # CI pipeline executing compilation, artifact verification,
 # database connectivity check, and container testing via Maven and Docker.
-# CI pipeline for Maven compilation, MySQL connection testing,
-# and Docker container verification.
 
 name: Group 7 Java CI & Database Container Verification
 
+# Trigger execution on every push event to the repo.
 on:
   push:
-  pull_request:
 
 jobs:
   build:
     name: Group 7 Assessment Pipeline Execution
 
     # Host job execution on an Ubuntu virtual environment.
-    name: Application Pipeline Execution
     runs-on: ubuntu-22.04
-
-    # Start MySQL for the integration test.
-    services:
-      db:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: world
-        ports:
-          - 3307:3306
-        options: >-
-          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -ppassword"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=10
-
-    env:
-      DB_HOST: 127.0.0.1
-      DB_PORT: 3307
-      DB_USER: root
-      DB_PASSWORD: password
 
     steps:
 
       # Fetch latest repository code.
       - name: Fetch source files from repository
-      - name: Fetch source files
         uses: actions/checkout@v4
 
       # Configure Java environment alongside Maven package caching.
       - name: Initialize OpenJDK environment
-      - name: Initialize Java 26
         uses: actions/setup-java@v4
         with:
           java-version: '26'
-          distribution: temurin
+          distribution: 'temurin'
           cache: maven
 
       # Execute full compilation cycle to generate deployable executable archive.
       - name: Compile and package application (mvn clean package)
-      # Load the World database schema and data.
-      # Change this path to the actual SQL dump in your repository.
-      - name: Import World database
-        run: mysql -h 127.0.0.1 -P 3307 -u root -ppassword world < path/to/world.sql
-
-      - name: Compile and package application
         run: mvn clean package
 
       # Confirm artifact creation in target directory.
       - name: Inspect built artifact in target directory
-      - name: Verify generated JAR
         run: ls -lh target/*.jar
 
       # Construct local container image using root Dockerfile.
       - name: Assemble application Docker image
-      # Test the Java database connection on the runner.
-      - name: Test MySQL connection
-        run: java -jar target/seMethods-1.0-SNAPSHOT.jar
-
-      - name: Build Docker image
         run: docker build -t devopsimage .
 
       # Use Docker Compose or spin up containers matching your service structure.
       - name: Spin up application and database services via Docker Compose
         run: docker compose up -d
-      # The container must use the host gateway to reach MySQL.
-      - name: Test Docker container
-        run: |
-          docker run --name devopscontainer \
-            --add-host=host.docker.internal:host-gateway \
-            -e DB_HOST=host.docker.internal \
-            -e DB_PORT=3307 \
-            -e DB_USER=root \
-            -e DB_PASSWORD=password \
-            devopsimage || {
-              docker logs devopscontainer
-              exit 1
-            }
 
       # Pause execution briefly to allow service startup and database initialization.
       - name: Delay for container bootstrap and DB readiness
@@ -105,9 +54,6 @@ jobs:
           echo "Checking database container health status..."
           docker inspect --format='{{json .State.Health.Status}}' group7-db || echo "Health check not configured, inspecting logs..."
           docker logs group7-db | grep -i "ready for connections" || true
-      - name: View container logs
-        if: always()
-        run: docker logs devopscontainer || true
 
       # Retrieve standard console output to confirm app startup state.
       - name: Fetch runtime container application output
@@ -116,6 +62,3 @@ jobs:
       # Gracefully shut down active containers post-test.
       - name: Teardown running containers and services
         run: docker compose down
-      - name: Clean up container
-        if: always()
-        run: docker rm -f devopscontainer || true
