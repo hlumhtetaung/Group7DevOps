@@ -7,3 +7,4 @@ public class MyTest {
     public void unitTest() {
         assertEquals(5, 5);
     }
+}
