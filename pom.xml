@@ -15,14 +15,13 @@
     </properties>
 
     <dependencies>
-        <!-- MySQL Connector -->
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <version>8.4.0</version>
         </dependency>
 
-        <!-- JUnit 5 API -->
+        <!-- Upgraded to JUnit 5.9.3 to support assertDoesNotThrow -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -30,15 +29,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- JUnit 5 Engine (Required for Surefire to execute JUnit 5 tests) -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.9.3</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- Mockito for mocking Database Connections -->
+        <!-- Added Mockito for mocking Database Connections -->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
@@ -46,7 +37,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Legacy / Optional Frameworks -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -64,7 +54,6 @@
 
     <build>
         <plugins>
-            <!-- Maven Assembly Plugin for Executable JAR -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -90,11 +79,13 @@
                 </executions>
             </plugin>
 
-            <!-- Maven Surefire Plugin for Test Execution -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
+                <configuration>
+                    <argLine>-Dnet.bytebuddy.experimental=true</argLine>
+                </configuration>
             </plugin>
         </plugins>
     </build>
