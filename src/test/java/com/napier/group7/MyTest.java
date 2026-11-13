@@ -258,4 +258,21 @@ public class MyTest {
     public void testCase26_CapitalCitiesByRegion() {
         assertDoesNotThrow(() -> US_C3_CapitalCitiesByRegion.generateCapitalCitiesByRegionReport(connection, "Caribbean"));
     }
+
+    // --- Cases 27 to 29: Top N capital city reports (US-C4 to US-C6) ---
+
+    @Test
+    public void testCase27_TopNCapitalCitiesWorldwide() {
+        assertDoesNotThrow(() -> US_C4_TopNCapitalCitiesWorldwide.generateTopNCapitalCitiesWorldwide(connection, 5));
+    }
+
+    @Test
+    public void testCase28_TopNCapitalCitiesByContinent() {
+        assertDoesNotThrow(() -> US_C5_TopNCapitalCitiesByContinent.generateTopNCapitalCitiesByContinentReport(connection, "Europe", 5));
+    }
+
+    @Test
+    public void testCase29_TopNCapitalCitiesByRegion() {
+        assertDoesNotThrow(() -> US_C6_TopNCapitalCitiesByRegion.generateTopNCapitalCitiesByRegionReport(connection, "Caribbean", 5));
+    }
 }
