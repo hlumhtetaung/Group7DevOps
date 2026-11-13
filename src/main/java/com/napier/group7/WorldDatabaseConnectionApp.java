@@ -90,6 +90,11 @@ public class WorldDatabaseConnectionApp {
                 System.out.println("16. City Query");
                 System.out.println("17. Top Populated Cities");
                 System.out.println("18. Top Populated Cities in Continent");
+                System.out.println("19. Continent Population Report");
+                System.out.println("20. Country Distributions Report");
+                System.out.println("21. Top Populated Cities in Country");
+                System.out.println("22. Top Populated Cities in District");
+                System.out.println("23. World Population Report");
                 System.out.println("0. Exit");
 
                 System.out.print("\nEnter your choice: ");
@@ -214,6 +219,26 @@ public class WorldDatabaseConnectionApp {
 
                     case 18:
                         TopPopulatedCitiesInContinent.main(args);
+                        break;
+
+                    case 19:
+                        ContinentPopulationReport.main(args);
+                        break;
+
+                    case 20:
+                        CountryDistributionReport.main(args);
+                        break;
+
+                    case 21:
+                        TopPopulatedCitiesInCountry.main(args);
+                        break;
+
+                    case 22:
+                        TopPopulatedCitiesInDistrict.main(args);
+                        break;
+
+                    case 23:
+                        WorldPopulationReport.main(args);
                         break;
 
                     case 0:

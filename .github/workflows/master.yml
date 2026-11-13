@@ -32,6 +32,10 @@ jobs:
       - name: Compile and package application (mvn clean package)
         run: mvn clean package
 
+      - name: Print Surefire Test Reports
+        if: failure()
+        run: cat target/surefire-reports/*.txt
+
       # Confirm artifact creation in target directory.
       - name: Inspect built artifact in target directory
         run: ls -lh target/*.jar
