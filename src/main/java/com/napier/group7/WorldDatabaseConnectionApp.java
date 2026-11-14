@@ -98,6 +98,9 @@ public class WorldDatabaseConnectionApp {
                 System.out.println("24. All Capital Cities in the World");
                 System.out.println("25. Capital Cities by Continent");
                 System.out.println("26. Capital Cities by Region");
+                System.out.println("27. Top N Capital Cities in the World");
+                System.out.println("28. Top N Capital Cities by Continent");
+                System.out.println("29. Top N Capital Cities by Region");
                 System.out.println("0. Exit");
 
                 System.out.print("\nEnter your choice: ");
@@ -268,6 +271,44 @@ public class WorldDatabaseConnectionApp {
                                 .generateCapitalCitiesByRegionReport(con, region);
                         break;
                     }
+
+                    case 27: {
+                        System.out.print("Enter the number of capital cities: ");
+                        int n = scanner.nextInt();
+
+                        US_C4_TopNCapitalCitiesWorldwide
+                                .generateTopNCapitalCitiesWorldwide(con, n);
+                        break;
+                    }
+
+                    case 28: {
+                        scanner.nextLine();
+
+                        System.out.print("Enter continent: ");
+                        String continent = scanner.nextLine();
+
+                        System.out.print("Enter the number of capital cities: ");
+                        int n = scanner.nextInt();
+
+                        US_C5_TopNCapitalCitiesByContinent
+                                .generateTopNCapitalCitiesByContinentReport(con, continent, n);
+                        break;
+                    }
+
+                    case 29: {
+                        scanner.nextLine();
+
+                        System.out.print("Enter region: ");
+                        String region = scanner.nextLine();
+
+                        System.out.print("Enter the number of capital cities: ");
+                        int n = scanner.nextInt();
+
+                        US_C6_TopNCapitalCitiesByRegion
+                                .generateTopNCapitalCitiesByRegionReport(con, region, n);
+                        break;
+                    }
+
                     case 0:
                         System.out.println("Exiting application...");
                         break;
