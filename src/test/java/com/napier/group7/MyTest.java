@@ -241,4 +241,21 @@ public class MyTest {
             // WorldPopulationReport.generateReport(connection);
         }, "Case 23 execution check");
     }
+
+    // --- Cases 24 to 26: Capital city reports (US-C1 to US-C3) ---
+
+    @Test
+    public void testCase24_AllCapitalCities() {
+        assertDoesNotThrow(() -> US_C1_AllCapitalCities.generateAllCapitalCitiesReport(connection));
+    }
+
+    @Test
+    public void testCase25_CapitalCitiesByContinent() {
+        assertDoesNotThrow(() -> US_C2_CapitalCitiesByContinent.generateCapitalCitiesByContinentReport(connection, "Asia"));
+    }
+
+    @Test
+    public void testCase26_CapitalCitiesByRegion() {
+        assertDoesNotThrow(() -> US_C3_CapitalCitiesByRegion.generateCapitalCitiesByRegionReport(connection, "Caribbean"));
+    }
 }

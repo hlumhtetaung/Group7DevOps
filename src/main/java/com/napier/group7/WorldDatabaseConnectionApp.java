@@ -95,6 +95,9 @@ public class WorldDatabaseConnectionApp {
                 System.out.println("21. Top Populated Cities in Country");
                 System.out.println("22. Top Populated Cities in District");
                 System.out.println("23. World Population Report");
+                System.out.println("24. All Capital Cities in the World");
+                System.out.println("25. Capital Cities by Continent");
+                System.out.println("26. Capital Cities by Region");
                 System.out.println("0. Exit");
 
                 System.out.print("\nEnter your choice: ");
@@ -240,7 +243,31 @@ public class WorldDatabaseConnectionApp {
                     case 23:
                         WorldPopulationReport.main(args);
                         break;
+                    case 24:
+                        US_C1_AllCapitalCities.generateAllCapitalCitiesReport(con);
+                        break;
 
+                    case 25: {
+                        scanner.nextLine();
+
+                        System.out.print("Enter continent: ");
+                        String continent = scanner.nextLine();
+
+                        US_C2_CapitalCitiesByContinent
+                                .generateCapitalCitiesByContinentReport(con, continent);
+                        break;
+                    }
+
+                    case 26: {
+                        scanner.nextLine();
+
+                        System.out.print("Enter region: ");
+                        String region = scanner.nextLine();
+
+                        US_C3_CapitalCitiesByRegion
+                                .generateCapitalCitiesByRegionReport(con, region);
+                        break;
+                    }
                     case 0:
                         System.out.println("Exiting application...");
                         break;
