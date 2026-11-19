@@ -1,4 +1,4 @@
-FROM eclipse-temurin:26-jdk
-COPY ./target/group7-1.0-SNAPSHOT-jar-with-dependencies.jar /tmp/app.jar
+FROM eclipse-temurin:21-jdk
+COPY ./target/devops.jar /tmp
 WORKDIR /tmp
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "devops.jar", "db:3306", "3000"]
