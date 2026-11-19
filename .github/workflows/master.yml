@@ -116,10 +116,7 @@ jobs:
         run: cat target/surefire-reports/*.txt
 
       - name: Inspect built artifact in target directory
-        run: |
-          pwd
-          ls -la
-          ls -la target/ || echo "No target directory"
+        run: ls -lh target/devops.jar
 
       - name: Assemble application Docker image
         run: docker build -t devopsimage .
