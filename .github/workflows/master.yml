@@ -1,5 +1,5 @@
-# CI pipeline executing unit tests, integration tests with coverage,
-# artifact packaging, and Docker Compose verification.
+# CI pipeline for Group 7: unit tests, integration tests + Codecov,
+# JAR packaging, and Docker Compose check.
 
 name: Group 7 Java CI & Database Container Verification
 
@@ -10,6 +10,7 @@ on:
     branches: [ "**" ]
 
 jobs:
+  # Run non-DB unit tests first so fast failures don't waste time spinning up MySQL
   UnitTests:
     name: Unit Tests
     runs-on: ubuntu-22.04
@@ -32,6 +33,8 @@ jobs:
         if: failure()
         run: cat target/surefire-reports/*.txt
 
+  # Spin up MySQL on 3307 (matches AppIntegrationTest), run DB tests,
+  # generate JaCoCo XML, and send it over to Codecov
   IntegrationTests:
     name: Integration Tests & Codecov
     runs-on: ubuntu-22.04
@@ -50,6 +53,7 @@ jobs:
 
       - name: Start MySQL Database Container
         run: |
+          # Load world.sql on first boot and expose 3307 for the integration test
           docker run -d --name group7-db \
             -e MYSQL_ROOT_PASSWORD=password \
             -p 3307:3306 \
@@ -58,6 +62,7 @@ jobs:
 
       - name: Wait for Database Readiness
         run: |
+          # Give MySQL up to ~60s to finish init before running tests
           for i in $(seq 1 30); do
             if docker exec group7-db mysqladmin ping -h 127.0.0.1 -uroot -ppassword --silent; then
               echo "MySQL is ready!"
@@ -85,6 +90,7 @@ jobs:
         if: always()
         run: docker rm -f group7-db || true
 
+  # Package the JAR and sanity-check the Docker Compose setup
   build:
     name: Group 7 Assessment Pipeline Execution
     runs-on: ubuntu-22.04
@@ -101,6 +107,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+      # Skip tests here since UnitTests and IntegrationTests already ran above
       - name: Compile and package application (mvn clean package -DskipTests)
         run: mvn clean package -DskipTests
 
@@ -111,8 +118,26 @@ jobs:
       - name: Inspect built artifact in target directory
         run: ls -lh target/*.jar
 
+      # Workaround: .dockerignore skips target/, so stage the JAR and Dockerfile
+      # into a temp folder (.ci-ctx) and name it devops.jar for the build
+      - name: Stage JAR and Dockerfile outside ignored target path
+        run: |
+          mkdir -p .ci-ctx/target
+          cp Dockerfile .ci-ctx/Dockerfile
+          if [ ! -f target/devops.jar ]; then
+            BUILT_JAR=$(ls -t target/*.jar | grep -v '^target/original-' | head -n 1)
+            echo "Copying $BUILT_JAR to .ci-ctx/target/devops.jar"
+            cp "$BUILT_JAR" .ci-ctx/target/devops.jar
+          else
+            cp target/devops.jar .ci-ctx/target/devops.jar
+          fi
+
       - name: Assemble application Docker image
-        run: docker build -t devopsimage .
+        run: docker build -f .ci-ctx/Dockerfile -t devopsimage .ci-ctx
+
+      - name: Clean up temporary build context
+        if: always()
+        run: rm -rf .ci-ctx
 
       - name: Spin up application and database services via Docker Compose
         run: docker compose up -d
