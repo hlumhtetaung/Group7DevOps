@@ -118,27 +118,6 @@ jobs:
       - name: Inspect built artifact in target directory
         run: ls -lh target/*.jar
 
-      # Workaround: .dockerignore skips target/, so stage the JAR and Dockerfile
-      # into a temp folder (.ci-ctx) and name it devops.jar for the build
-      - name: Stage JAR and Dockerfile outside ignored target path
-        run: |
-          mkdir -p .ci-ctx/target
-          cp Dockerfile .ci-ctx/Dockerfile
-          if [ ! -f target/devops.jar ]; then
-            BUILT_JAR=$(ls -t target/*.jar | grep -v '^target/original-' | head -n 1)
-            echo "Copying $BUILT_JAR to .ci-ctx/target/devops.jar"
-            cp "$BUILT_JAR" .ci-ctx/target/devops.jar
-          else
-            cp target/devops.jar .ci-ctx/target/devops.jar
-          fi
-
-      - name: Assemble application Docker image
-        run: docker build -f .ci-ctx/Dockerfile -t devopsimage .ci-ctx
-
-      - name: Clean up temporary build context
-        if: always()
-        run: rm -rf .ci-ctx
-
       - name: Spin up application and database services via Docker Compose
         run: docker compose up -d
 
