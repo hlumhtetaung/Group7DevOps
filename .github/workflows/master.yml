@@ -90,7 +90,7 @@ jobs:
         if: always()
         run: docker rm -f group7-db || true
 
-  # Package the JAR and sanity-check the Docker Compose setup
+  # Package the JAR, build devopsimage, and sanity-check the Docker Compose setup
   build:
     name: Group 7 Assessment Pipeline Execution
     runs-on: ubuntu-22.04
@@ -117,6 +117,9 @@ jobs:
 
       - name: Inspect built artifact in target directory
         run: ls -lh target/*.jar
+
+      - name: Assemble application Docker image
+        run: docker build -t devopsimage .
 
       - name: Spin up application and database services via Docker Compose
         run: docker compose up -d
